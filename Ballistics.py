@@ -27,11 +27,11 @@ dt = 0.01
 # Drag coefficient:
 Cd = 0.5 * 1.1
 # Rocket mass (without motor) and payload mass [kg]:
-m_rocket, m_payload = 8, 4
+m_rocket, m_payload = 11, 4
 # Empty motor mass [kg]:
 m_motor = 5
 # Rocket radius [m]:
-r = 0.5 * 108e-3
+r = 0.5 * 110e-3
 
 # Parachute data:
 # Time after apogee for drogue parachute activation [s]:
