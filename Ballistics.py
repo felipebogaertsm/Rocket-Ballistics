@@ -16,35 +16,35 @@ mp_file = np.array(motordata.Prop_mass)
 # ______________________________________________________________
 # INPUTS
 
-# Initial conditions [m, m/s, s]:
+# Initial conditions [m, m/s, s]
 y, v, t = np.array([0]), np.array([0]), np.array([0])
-# Initial height above sea level [m]:
+# Initial height above sea level [m]
 h0 = 4
-# Launch rail length [m]:
+# Launch rail length [m]
 rain_length = 5
-# Time step (0.01 recommended) [s]:
+# Time step (0.01 recommended) [s]
 dt = 0.01
-# Drag coefficient:
-Cd = 0.5
-# Rocket mass (without motor) and payload mass [kg]:
-m_rocket, m_payload = 11, 4
-# Empty motor mass [kg]:
-m_motor = 5
-# Rocket radius [m]:
-r = 0.5 * 101.6e-3
+# Drag coefficient
+Cd = 0.4
+# Rocket mass (without motor) and payload mass [kg]
+m_rocket, m_payload = 22, 5
+# Empty motor mass [kg]
+m_motor = 15
+# Rocket radius [m]
+r = 0.5 * 160e-3
 
-# Parachute data:
-# Time after apogee for drogue parachute activation [s]:
+# Recovery data:
+# Time after apogee for drogue parachute activation [s]
 drogue_time = 1
-# Drogue drag coefficient:
+# Drogue drag coefficient
 Cd_drogue = 1.75
-# Drogue effective diameter [m]:
+# Drogue effective diameter [m]
 D_drogue = .3
-# Main parachute drag coefficient [m]:
+# Main parachute drag coefficient [m]
 Cd_main = 1.75
-# Main parachute effective diameter [m]:
+# Main parachute effective diameter [m]
 D_main = 0.8
-# Main parachute height activation [m]:
+# Main parachute height activation [m]
 main_chute_activation_height = 450
 
 # ______________________________________________________________
@@ -120,7 +120,7 @@ print('\n')
 print('Apogee: %.1f meters' % apogee)
 print('Maximum velocity: %.1f m/s or Mach %.4f' % (np.max(v),
                         (np.max(v) / atm.ATMOSPHERE_1976(y[np.where(v == np.max(v))]).v_sonic)))
-print('Maximum acceleration: %.1f m/s-s or %.2f gs' % (np.max(a), np.max(a)/g))
+print('Maximum acceleration: %.1f m/s-s or %.2f g' % (np.max(a), np.max(a)/g))
 print('Initial mass of the vehicle: %.3f kg' % (Minitial))
 print('Time to apogee %.1f seconds' % (t[np.where(y == apogee)]))
 print('Time to reach ground: %.1f seconds' % (t[-1]))
