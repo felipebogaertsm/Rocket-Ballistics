@@ -29,7 +29,7 @@ Cd = 0.4
 # Rocket mass (without motor) and payload mass [kg]
 m_rocket, m_payload = 22, 5
 # Empty motor mass [kg]
-m_motor = 15
+m_motor = 13
 # Rocket radius [m]
 r = 0.5 * 160e-3
 
