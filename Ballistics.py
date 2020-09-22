@@ -6,14 +6,12 @@ import matplotlib.pyplot as plt
 from functions import *
 
 # ______________________________________________________________
-# MOTOR DATA (SRM SOLVER PROGRAM) AND CD (FROM AEROLAB) READ FROM CSV
+# MOTOR DATA (SRM SOLVER PROGRAM) READ FROM CSV
 
 motordata = pd.read_csv('motor_data.csv')
 t_file = np.array(motordata.Time)
 T_file = np.array(motordata.Thrust)
 mp_file = np.array(motordata.Prop_Mass)
-
-cd_data_df = pd.read_csv('cd_data.csv')
 
 # ______________________________________________________________
 # INPUTS
@@ -27,14 +25,13 @@ rain_length = 5
 # Time step (0.01 recommended) [s]
 dt = 0.01
 # Drag coefficient
-Cd = np.array(cd_data_df.Cd)
-Mach_Cd = np.array(cd_data_df.Mach)
+Cd = 0.35
 # Rocket mass (without motor) and payload mass [kg]
-m_rocket, m_payload = 12, 4
+m_rocket, m_payload = 22, 5
 # Empty motor mass [kg]
-m_motor = 5
+m_motor = 17
 # Rocket radius [m]
-r = 0.5 * 102e-3
+r = 0.5 * 160e-3
 
 # Recovery data:
 # Time after apogee for drogue parachute activation [s]
@@ -112,9 +109,9 @@ if y[-1] < 0:
     a = np.delete(a, -1)
     t = np.delete(t, -1)
 
-vRail = v[np.where(y >= rain_length)]
-vRail = vRail[0]
-yburnout = y[np.where(v == np.max(v))]
+v_rail = v[np.where(y >= rain_length)]
+v_rail = v_rail[0]
+y_burnout = y[np.where(v == np.max(v))]
 
 # ______________________________________________________________
 # RESULTS
@@ -123,11 +120,11 @@ print('\n')
 print('Apogee: %.1f meters' % apogee)
 print('Maximum velocity: %.1f m/s or Mach %.4f' % (np.max(v),
                         (np.max(v) / atm.ATMOSPHERE_1976(y[np.where(v == np.max(v))]).v_sonic)))
-print('Maximum acceleration: %.1f m/s-s or %.2f g' % (np.max(a), np.max(a)/g))
+print('Maximum acceleration: %.1f m/s-s or %.2f g' % (np.max(a), np.max(a) / g))
 print('Initial mass of the vehicle: %.3f kg' % (Minitial))
 print('Time to apogee %.1f seconds' % (t[np.where(y == apogee)]))
 print('Time to reach ground: %.1f seconds' % (t[-1]))
-print('Velocity out of the launch rail: %.1f m/s' % (vRail))
+print('Velocity out of the launch rail: %.1f m/s' % (v_rail))
 print('Drogue terminal velocity: %.1f m/s' % np.abs(v[np.where(t == main_time - dt)]))
 print('Main chute terminal velocity: %.1f m/s' % np.abs(v[-1]))
 
@@ -149,4 +146,33 @@ plt.ylabel('Acc (m/s2)')
 plt.xlabel('Time (s)')
 plt.grid(linestyle='-.')
 plt.plot(t, a, color='r')
-plt.show()
+
+fig1.savefig('output/Trajectory_Plots.png')
+
+fig2 = plt.figure()
+
+plt.plot(t, y, color='b')
+plt.ylabel('Height (m)')
+plt.xlabel('Time (s)')
+plt.ylim(0, np.max(y) * 1.1)
+plt.xlim(0, t[-1])
+plt.grid()
+
+fig2.savefig('output/Height.png', dpi=300)
+
+fig3, ax3 = plt.subplots()
+
+ax3.set_xlim(0, t[-1])
+ax3.set_ylim(np.min(v * 3.6), np.max(v * 3.6) * 1.05)
+ax3.plot(t, v * 3.6, color='#009933')
+ax3.set_ylabel('Velocity (km/h)')
+ax3.set_xlabel('Time (s)')
+ax3.grid()
+
+ax4 = ax3.twinx()
+ax4.set_xlim(0, t[-1])
+ax4.set_ylim(np.min(a / g), np.max(a / g) * 1.3)
+ax4.plot(t, a / g, color='#ff6600')
+ax4.set_ylabel('Acceleration (g)')
+
+fig3.savefig('output/Velocity_Acc.png', dpi=300)
