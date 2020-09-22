@@ -6,12 +6,14 @@ import matplotlib.pyplot as plt
 from functions import *
 
 # ______________________________________________________________
-# MOTOR DATA READ FROM CSV (SRM SOLVER PROGRAM)
+# MOTOR DATA (SRM SOLVER PROGRAM) AND CD (FROM AEROLAB) READ FROM CSV
 
-motordata = pd.read_csv('motordata.csv')
+motordata = pd.read_csv('motor_data.csv')
 t_file = np.array(motordata.Time)
 T_file = np.array(motordata.Thrust)
-mp_file = np.array(motordata.Prop_mass)
+mp_file = np.array(motordata.Prop_Mass)
+
+cd_data_df = pd.read_csv('cd_data.csv')
 
 # ______________________________________________________________
 # INPUTS
@@ -25,13 +27,14 @@ rain_length = 5
 # Time step (0.01 recommended) [s]
 dt = 0.01
 # Drag coefficient
-Cd = 0.4
+Cd = np.array(cd_data_df.Cd)
+Mach_Cd = np.array(cd_data_df.Mach)
 # Rocket mass (without motor) and payload mass [kg]
-m_rocket, m_payload = 22, 5
+m_rocket, m_payload = 12, 4
 # Empty motor mass [kg]
-m_motor = 13
+m_motor = 5
 # Rocket radius [m]
-r = 0.5 * 160e-3
+r = 0.5 * 102e-3
 
 # Recovery data:
 # Time after apogee for drogue parachute activation [s]
