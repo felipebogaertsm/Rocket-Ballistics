@@ -147,7 +147,7 @@ plt.xlabel('Time (s)')
 plt.grid(linestyle='-.')
 plt.plot(t, a, color='r')
 
-fig1.savefig('output/Trajectory_Plots.png')
+fig1.savefig('output/Trajectory_Plots.png', dpi=300)
 
 fig2 = plt.figure()
 
