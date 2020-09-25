@@ -29,7 +29,7 @@ Cd = 0.35
 # Rocket mass (without motor) and payload mass [kg]
 m_rocket, m_payload = 22, 5
 # Empty motor mass [kg]
-m_motor = 17
+m_motor = 13
 # Rocket radius [m]
 r = 0.5 * 160e-3
 
@@ -39,43 +39,43 @@ drogue_time = 1
 # Drogue drag coefficient
 Cd_drogue = 1.75
 # Drogue effective diameter [m]
-D_drogue = .3
+D_drogue = 1.25
 # Main parachute drag coefficient [m]
-Cd_main = 1.75
+Cd_main = 2
 # Main parachute effective diameter [m]
-D_main = 0.8
+D_main = 2.66
 # Main parachute height activation [m]
-main_chute_activation_height = 450
+main_chute_activation_height = 500
 
 # ______________________________________________________________
 # BALLISTICS SIMULATION
 
-mp = np.array(mp_file[0])
+m_prop = np.array(mp_file[0])
 apogee = 0
 apogee_time = -1
 main_time = 0
 
 i = 0
-while y[i] >= 0:
+while y[i] >= 0 or m_prop[i - 1] > 0:
 
     T = np.interp(t, t_file, T_file, left=0, right=0)
-    mp = np.interp(t, t_file, mp_file, left=mp_file[0], right=0)
+    m_prop = np.interp(t, t_file, mp_file, left=mp_file[0], right=0)
 
     if i == 0:
-        a = np.array([T[0] * (m_rocket + m_payload + mp[0] + m_motor) * 0])
+        a = np.array([T[0] * (m_rocket + m_payload + m_prop[0] + m_motor) * 0])
 
     # Local density 'p_air' [kg/m3] and acceleration of gravity 'g' [m/s2].
     p_air = atm.ATMOSPHERE_1976(y[i] + h0).rho
     g = atm.ATMOSPHERE_1976.gravity(h0 + y[i])
 
     # Instantaneous mass of the vehicle [kg]:
-    M = m_rocket + m_payload + m_motor + mp[i]
+    M = m_rocket + m_payload + m_motor + m_prop[i]
 
     if i == 0:
         Minitial = M
 
     # Drag properties:
-    if v[i] < 0 and y[i] <= main_chute_activation_height and mp[i] == 0:
+    if v[i] < 0 and y[i] <= main_chute_activation_height and m_prop[i] == 0:
         if main_time == 0:
             main_time = t[i]
         Adrag = (np.pi * r ** 2) * Cd + (np.pi * D_drogue ** 2) * 0.25 * Cd_drogue + \
@@ -97,7 +97,7 @@ while y[i] >= 0:
     a = np.append(a, (1 / 6) * (l1 + 2 * (l2 + l3) + l4))
     t = np.append(t, t[i] + dt)
 
-    if y[i + 1] <= y[i] and mp[i] == 0 and apogee == 0:
+    if y[i + 1] <= y[i] and m_prop[i] == 0 and apogee == 0:
         apogee = y[i]
         apogee_time = t[np.where(y == apogee)]
 
