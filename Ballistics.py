@@ -27,7 +27,7 @@ dt = 0.01
 # Drag coefficient
 Cd = 0.35
 # Rocket mass (without motor) and payload mass [kg]
-m_rocket, m_payload = 22, 5
+m_rocket, m_payload = 27, 5
 # Empty motor mass [kg]
 m_motor = 15
 # Rocket radius [m]
